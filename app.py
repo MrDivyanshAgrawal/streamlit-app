@@ -10,6 +10,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from collections import defaultdict
 import matplotlib.pyplot as plt
 import streamlit as st
+import io
 
 # Download required NLTK data
 nltk.download('stopwords')
@@ -58,7 +59,7 @@ class TextSimilarityRecommender:
         return vectorizer, tfidf_matrix
 
     def _create_inverted_index(self, tfidf_matrix, terms):
-        """Create an inverted index for fast document retrieval."""
+        """Create an inverted index for fast document retrieval."""        
         inverted_index = defaultdict(set)
         for term_index, term in enumerate(terms):
             for doc_index in tfidf_matrix[:, term_index].nonzero()[0]:
@@ -100,7 +101,7 @@ class TextSimilarityRecommender:
         st.pyplot(fig)
 
     def export_to_csv(self, similar_indices, similarity_scores, top_k, idx):
-        """Export the top K results to a CSV file."""
+        """Export the top K results to a CSV file and allow the user to download it."""
         export_data = []
         for rank, (i, score) in enumerate(zip(similar_indices, similarity_scores), 1):
             export_data.append({
@@ -112,9 +113,19 @@ class TextSimilarityRecommender:
             })
 
         export_df = pd.DataFrame(export_data)
-        filename = f'recommended_articles_{idx}.csv'
-        export_df.to_csv(filename, index=False)
-        st.download_button("Download CSV", filename=filename)
+
+        # Save the CSV to an in-memory buffer
+        csv_buffer = io.StringIO()
+        export_df.to_csv(csv_buffer, index=False)
+        csv_buffer.seek(0)  # Reset pointer to the start of the buffer
+
+        # Create a download button for the user
+        st.download_button(
+            label="Download CSV",
+            data=csv_buffer,
+            file_name=f'recommended_articles_{idx}.csv',
+            mime='text/csv'
+        )
 
 # === Streamlit Interface ===
 def main():
