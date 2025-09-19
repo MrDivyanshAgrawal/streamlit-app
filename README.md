@@ -58,7 +58,7 @@ matplotlib
 
 ## 📷 Screenshots
 ![Find SimilarText Indices](SimilarText.jpg)
-![Show all Document Indices](documentIndices.jpg)
+![Show all Document Indices](documentsIndices.jpg)
 
 ## 👨‍💻 Author
 Divyansh Agrawal Built with ❤️ using [Streamlit](https://streamlit.io). 
