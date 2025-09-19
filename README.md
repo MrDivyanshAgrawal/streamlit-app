@@ -42,7 +42,7 @@ streamlit run app.py
 ➡ Open http://localhost:8501 in your browser 🎉
 
 ## 🛠 Requirements
-Python 3.9+
+Python 3.12
 streamlit
 nltk
 pandas
